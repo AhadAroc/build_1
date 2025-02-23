@@ -4,7 +4,8 @@
     "main": "bot.js",
     "dependencies": {
       "telegraf": "^4.x.x",
-      "mysql2": "^3.x.x"
+      "mysql2": "^3.x.x",
+      "cloudinary": "^1.x.x"
     },
     "scripts": {
       "start": "node bot.js"
