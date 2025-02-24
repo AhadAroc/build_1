@@ -1,5 +1,15 @@
 const mysql = require('mysql2/promise');
-const { dbConfig } = require('./config');
+require('dotenv').config();
+
+const dbConfig = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+};
 
 const pool = mysql.createPool(dbConfig);
 
@@ -23,6 +33,7 @@ async function setupDatabase() {
         console.error('❌ خطأ في تهيئة قاعدة البيانات:', error);
     }
 }
+
 async function createPrimaryDevelopersTable() {
     try {
         const connection = await pool.getConnection();
@@ -39,9 +50,16 @@ async function createPrimaryDevelopersTable() {
     }
 }
 
-// ... (keep all the existing code above)
+// Test database connection
+pool.getConnection()
+    .then(connection => {
+        console.log('Database connected successfully');
+        connection.release();
+    })
+    .catch(err => {
+        console.error('Error connecting to the database:', err);
+    });
 
-// Replace the two separate module.exports statements with this single one:
 module.exports = {
     pool,
     setupDatabase,
