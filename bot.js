@@ -26,6 +26,12 @@ let tempReplyWord = '';
 
     bot.launch().then(() => console.log('🚀 البوت يعمل...')).catch(err => console.error('Error starting bot:', err));
 })();
+app.get('/', (req, res) => {
+  res.send('Bot is running!');
+});
 
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
