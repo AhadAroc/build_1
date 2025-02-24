@@ -5,7 +5,9 @@ const { setupCommands } = require('./commands');
 const { setupActions } = require('./actions');
 const { setupMiddlewares } = require('./middlewares');
 const { setupHandlers } = require('./handlers');
-
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
 const bot = new Telegraf(token);
 const generalReplies = new Map();
 
