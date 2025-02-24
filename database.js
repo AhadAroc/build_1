@@ -14,7 +14,7 @@ const dbConfig = {
 };
 
 const pool = mysql.createPool(dbConfig);
-const pool = mysql.createPool(dbConfig);
+
 
 async function setupDatabase() {
     try {
