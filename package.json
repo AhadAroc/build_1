@@ -1,16 +1,20 @@
 {
-    "name": "protection",
-    "version": "1.0.0",
-    "main": "bot.js",
-    "dependencies": {
-      "mongodb": "^4.0.0",
-      "telegraf": "^4.x.x",
-      "cloudinary": "^1.41.0",
-      "express": "^4.18.2",
-      "@google-cloud/local-auth": "^2.x.x",
-      "googleapis": "^x.x.x"
-    },
-    "scripts": {
-      "start": "node bot.js"
-    }
+  "name": "protection",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "dependencies": {
+    "mongodb": "^4.0.0",
+    "telegraf": "^4.x.x",
+    "cloudinary": "^1.41.0",
+    "express": "^4.18.2",
+    "@google-cloud/local-auth": "^2.x.x",
+    "googleapis": "^x.x.x",
+    "dotenv": "^16.0.0"
+  },
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "engines": {
+    "node": "18.x"
+  }
 }
