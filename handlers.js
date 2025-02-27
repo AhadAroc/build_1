@@ -18,16 +18,8 @@ const videoRestrictionStatus = new Map();
 
 let generalReplies = new Map();
 let awaitingReplyWord = false;
-let awaitingReplyResponse =
-
-// Create a connection pool
-const pool = mysql.createPool(dbConfig);
-
-const generalReplies = new Map();
-let awaitingReplyWord = false;
-let awaitingReplyResponse = false;  // Add this line
+let awaitingReplyResponse = false;
 let tempReplyWord = '';
- 
 
 
 
