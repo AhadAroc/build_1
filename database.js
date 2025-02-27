@@ -1,70 +1,77 @@
-const mysql = require('mysql2/promise');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-const dbConfig = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    connectTimeout: 60000 // 60 seconds timeout
-};
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
-const pool = mysql.createPool(dbConfig);
-
+async function connectToDatabase() {
+  try {
+    await client.connect();
+    console.log('Connected successfully to MongoDB');
+    return client.db(process.env.DB_NAME);
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    throw error;
+  }
+}
 
 async function setupDatabase() {
-    try {
-        const connection = await pool.getConnection();
-        await connection.query(`
-            CREATE TABLE IF NOT EXISTS replies (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id BIGINT,
-                username VARCHAR(255),
-                trigger_word VARCHAR(255),
-                reply_text TEXT,
-                media_type ENUM('text', 'sticker', 'photo') DEFAULT 'text',
-                UNIQUE KEY unique_reply (user_id, trigger_word)
-            )
-        `);
-        connection.release();
-        console.log('✅ تم تهيئة قاعدة البيانات');
-    } catch (error) {
-        console.error('❌ خطأ في تهيئة قاعدة البيانات:', error);
-    }
+  const db = await connectToDatabase();
+  console.log('✅ Database connected');
+  
+  // Ensure indexes for better query performance
+  await db.collection('replies').createIndex({ user_id: 1, trigger_word: 1 }, { unique: true });
+  await db.collection('developers').createIndex({ user_id: 1 }, { unique: true });
+  
+  console.log('✅ Indexes created');
 }
 
-async function createPrimaryDevelopersTable() {
-    try {
-        const connection = await pool.getConnection();
-        await connection.query(`
-            CREATE TABLE IF NOT EXISTS primary_developers (
-                user_id BIGINT PRIMARY KEY,
-                username VARCHAR(255)
-            )
-        `);
-        connection.release();
-        console.log('primary_developers table created or already exists');
-    } catch (error) {
-        console.error('Error creating primary_developers table:', error);
-    }
+async function getDevelopers() {
+  const db = await connectToDatabase();
+  return db.collection('developers').find().toArray();
 }
 
-// Test database connection
-pool.getConnection()
-    .then(connection => {
-        console.log('Database connected successfully');
-        connection.release();
-    })
-    .catch(err => {
-        console.error('Error connecting to the database:', err);
-    });
+async function getReplies() {
+  const db = await connectToDatabase();
+  return db.collection('replies').find().toArray();
+}
+
+async function addReply(reply) {
+  const db = await connectToDatabase();
+  return db.collection('replies').insertOne(reply);
+}
+
+async function updateReply(user_id, trigger_word, newData) {
+  const db = await connectToDatabase();
+  return db.collection('replies').updateOne(
+    { user_id, trigger_word },
+    { $set: newData }
+  );
+}
+
+async function deleteReply(user_id, trigger_word) {
+  const db = await connectToDatabase();
+  return db.collection('replies').deleteOne({ user_id, trigger_word });
+}
+
+async function addDeveloper(developer) {
+  const db = await connectToDatabase();
+  return db.collection('developers').insertOne(developer);
+}
+
+async function removeDeveloper(user_id) {
+  const db = await connectToDatabase();
+  return db.collection('developers').deleteOne({ user_id });
+}
 
 module.exports = {
-    pool,
-    setupDatabase,
-    createPrimaryDevelopersTable
+  connectToDatabase,
+  setupDatabase,
+  getDevelopers,
+  getReplies,
+  addReply,
+  updateReply,
+  deleteReply,
+  addDeveloper,
+  removeDeveloper
 };
