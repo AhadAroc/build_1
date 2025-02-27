@@ -3,31 +3,22 @@
 
 
 
-const developerIds = new Set(['7308214106']);
-// Add this near the top of your file, with other global variables
-const gifRestrictionStatus = new Map();
+const { MongoClient } = require('mongodb');
+const { mongoUri, dbName } = require('./config');
+const { getDevelopers, getReplies, addReply, updateReply } = require('./database');
 
+const developerIds = new Set(['7308214106']);
+const gifRestrictionStatus = new Map();
 const subscriptionCache = new Map();
-// Add this near the top of your file, with other global variables
 const linkRestrictionStatus = new Map();
 let photoMessages = new Map(); // chatId -> Set of message IDs
-// Add this near the top of your file, with other global variables
 const photoRestrictionStatus = new Map();
-// Store active groups (preferably use a database in production)
 let activeGroups = new Map();
-
-// Add this near the top of your file, with other global variables
 const videoRestrictionStatus = new Map();
 
-const mysql = require('mysql2/promise');
-
-// MySQL connection configuration
-const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'replays'
-};
+let generalReplies = new Map();
+let awaitingReplyWord = false;
+let awaitingReplyResponse =
 
 // Create a connection pool
 const pool = mysql.createPool(dbConfig);
