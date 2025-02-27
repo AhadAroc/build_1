@@ -3,6 +3,9 @@ module.exports = {
     mongoUri: 'mongodb+srv://Amr:NidisuSI@cluster0.ay6fa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
     dbName: 'replays',
     developerIds: new Set(['7308214106']),
-    // Include an empty cloudinary object to indicate it's used but not configured
-    cloudinary: {}
+    cloudinary: {
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dpxowt5m5',
+        api_key: process.env.CLOUDINARY_API_KEY || '248273337268518',
+        api_secret: process.env.CLOUDINARY_API_SECRET || 'SihooJWz6cMi5bNDAU26Tmf-tIw'
+    }
 };
