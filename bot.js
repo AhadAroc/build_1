@@ -14,7 +14,7 @@ const generalReplies = new Map();
 let awaitingReplyWord = false;
 let awaitingReplyResponse = false;
 let tempReplyWord = '';
-
+const cloudinary = require('cloudinary').v2;
 // Call these functions when your bot starts
 (async () => {
     await createPrimaryDevelopersTable();
