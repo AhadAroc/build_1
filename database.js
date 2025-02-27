@@ -1,20 +1,43 @@
 const { MongoClient } = require('mongodb');
+const { mongoUri, dbName } = require('./config');
 
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-  console.error('MONGODB_URI environment variable is not set');
-  process.exit(1);
-}
-
-const client = new MongoClient(uri);
+const client = new MongoClient(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  ssl: true,
+  tls: true
+});
 
 async function connectToDatabase() {
   try {
     await client.connect();
     console.log('Connected successfully to MongoDB');
-    return client.db(process.env.DB_NAME);
+    return client.db(dbName);
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
+    throw error;
+  }
+}
+
+async function createPrimaryDevelopersTable() {
+  try {
+    const db = await connectToDatabase();
+    // Check if the developers collection exists
+    const collections = await db.listCollections({ name: 'developers' }).toArray();
+    
+    if (collections.length === 0) {
+      // Create the developers collection if it doesn't exist
+      await db.createCollection('developers');
+      console.log('✅ Developers collection created');
+    }
+    
+    // Ensure the index exists
+    await db.collection('developers').createIndex({ user_id: 1 }, { unique: true });
+    console.log('✅ Primary developers table setup complete');
+    
+    return true;
+  } catch (error) {
+    console.error('Error creating primary developers table:', error);
     throw error;
   }
 }
@@ -71,6 +94,7 @@ async function removeDeveloper(user_id) {
 module.exports = {
   connectToDatabase,
   setupDatabase,
+  createPrimaryDevelopersTable,
   getDevelopers,
   getReplies,
   addReply,
