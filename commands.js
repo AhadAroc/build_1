@@ -1,7 +1,7 @@
 const { adminOnly } = require('./middlewares');
 const { developerIds } = require('./handlers');
 const { pool } = require('./database'); // Add this line to import the pool
-const { createPrimaryDevelopersTable } = require('./database');
+
 function setupCommands(bot) {
     async function deleteLatestMessage(ctx) {
         try {
