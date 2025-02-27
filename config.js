@@ -1,11 +1,7 @@
+
 module.exports = {
-    token: '7511592050:AAH1IMH8kG6UolhwwzIOW-Pf2UUM04hEdTM', // استبدله بتوكن البوت الحقيقي
-    dbConfig: {
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 3306,
-        user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || ' ',
-        database: process.env.DB_NAME || 'replays'
-    },
+    token: '7511592050:AAH1IMH8kG6UolhwwzIOW-Pf2UUM04hEdTM',
+    mongoUri: 'mongodb+srv://Amr:NidisuSI@cluster0.ay6fa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+    dbName: 'replays',
     developerIds: new Set(['7308214106'])
 };
