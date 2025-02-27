@@ -1,6 +1,6 @@
 const { Telegraf } = require('telegraf');
 const { token } = require('./config');
-const { setupDatabase, createPrimaryDevelopersTable } = require('./database');
+const { setupDatabase} = require('./database');
 const { setupCommands } = require('./commands');
 const { setupActions } = require('./actions');
 const { setupMiddlewares } = require('./middlewares');
